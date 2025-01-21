@@ -5,7 +5,7 @@ const UpdateUser = () => {
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [age, setAge] = useState("");
+  const [age, setAge] = useState(" ");
 
   const handleUpdate = async (e) => {
     e.preventDefault();

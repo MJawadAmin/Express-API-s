@@ -41,19 +41,28 @@ app.post('/createUser', async (req , res )=>{
     }
 })
 
-app.put('/updateUser', async (req , res )=>{
+app.post('/updateUser', async (req , res )=>{
     try{
-        const {name , email , age }= req.body;
-        const newUser = new UserModel({
-            name : name ,
-            email : email ,
-            age : age 
-        })
-        await newUser.findByIdAndUpdate()
+        const {name , email , age , userId }= req.body;
+        const user= await UserModel.findById(userId);
+        if (!user){
+            res.status(200).json({
+                status:' Failed',
+                message: ' user not found '
+            })
+            
+        }else{
+            user.email= email ;
+            user.age = age ;
+            user.name = name ;
+        }
+        await user.save()
         res.status(200).json({
-            status :'connected ',
-            message : ' success'
+            status: ' succes',
+            message : 'updated'
+
         })
+
     }catch (err){
         console.log(err);
         res.status(200).json({
