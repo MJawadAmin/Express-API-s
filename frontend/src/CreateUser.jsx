@@ -1,15 +1,23 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
+
 
 const CreateUser = () => {
     const [name , setName ]=useState()
     const [email , setEmail]= useState()
     const [age , setAge] = useState()
+    const navigate = useNavigate();
      const Submit =(e)=>{
-        e.preventDefaul();
-        axios.post ('http//localhost:3000/createUser',{ name, email, age})
-            .then (result => console.log(result))
-            .catch(err => console.log(err))
+        e.preventDefault();
+        axios
+        .post('http://localhost:3000/createUser', { name, email, age })
+        .then(result => {
+          console.log(result);
+          navigate('/');
+        })
+        .catch(err => console.log(err));
+      
         }
     
 
