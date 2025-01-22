@@ -28,25 +28,25 @@ app.post('/createUser', async (req , res )=>{
             age : age 
         })
         await newUser.save()
-        res.status(200).json({
+       return  res.status(200).json({
             status :'connected ',
-            message : ' success'
+            message : 'user createdd success'
         })
     }catch (err){
         console.log(err);
-        res.status(200).json({
+       return  res.status(200).json({
             status : 'failed ',
             message : 'Server Issue '
         })
     }
 })
 
-app.post('/updateUser', async (req , res )=>{
+app.put('/updateUser', async (req , res )=>{
     try{
         const {name , email , age , userId }= req.body;
         const user= await UserModel.findById(userId);
         if (!user){
-            res.status(200).json({
+           return  res.status(200).json({
                 status:' Failed',
                 message: ' user not found '
             })
@@ -57,15 +57,15 @@ app.post('/updateUser', async (req , res )=>{
             user.name = name ;
         }
         await user.save()
-        res.status(200).json({
+       return  res.status(200).json({
             status: ' succes',
-            message : 'updated'
+            message : 'updated succesfully'
 
         })
 
     }catch (err){
         console.log(err);
-        res.status(200).json({
+       return  res.status(200).json({
             status : 'failed ',
             message : 'Server Issue '
         })
@@ -73,25 +73,60 @@ app.post('/updateUser', async (req , res )=>{
 })
 app.delete('/deleteUser', async (req , res )=>{
     try{
-        const {name , email , age }= req.body;
-        const newUser = new UserModel({
-            name : name ,
-            email : email ,
-            age : age 
-        })
-        await newUser.findByIdAndDelete()
-        res.status(200).json({
-            status :'connected ',
-            message : ' success'
+        const {userId}= req.body;
+        const user= await UserModel.findById(userId)
+        if (!user){
+            return res.status(200).json({
+                status: "failed",
+                message :"deleted Succesfully"
+            })
+        }
+        await UserModel.findByIdAndDelete(userId)
+       return  res.status(200).json({
+            status :'success ',
+            message : 'user deleted Success'
         })
     }catch (err){
         console.log(err);
-        res.status(200).json({
+       return  res.status(200).json({
             status : 'failed ',
             message : 'Server Issue '
         })
     }
 })
+
+
+app.get('/fetchUser', async  (req, res )=>{
+    try{ 
+        const Users= await UserModel.find();
+        if (!Users){
+          return res.status(200).json({
+                status :" Failed ",
+                message : "user not found "
+            })
+        }    
+      return res.status(200).json({
+            status: "Success",
+            message: " Users Found ",
+            Users: Users
+        })
+    }catch (err){
+        console.log(err)
+         return res.status(200).json({
+            status : " Failed",
+            message : " Server issue"
+        })
+
+    }
+})
+
+
 app.listen(3000 , ()=>{
     console.log(`Server Connected Succesfully at ${PORT}`)
+})
+
+app.get('/', (req, res) => {
+    return res.send({
+        mess: 'I am ok!'
+    })
 })
